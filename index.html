@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>스카우트 SCOUT! 온라인</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f7efd9; --cream2:#efe3c3; --ink:#2b2340; --red:#d8433b; --red2:#b2302a;
+  --navy:#24305e; --gold:#e8b23a; --green:#3f9b5a; --muted:#7a6f63;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,.5), transparent 40%),
+    repeating-linear-gradient(45deg, #f3e7c9 0 18px, #f7efd9 18px 36px);
+  min-height:100%;
+}
+button{font-family:inherit;cursor:pointer}
+.tent{
+  height:14px;
+  background:repeating-linear-gradient(90deg,var(--red) 0 28px,#fff6e4 28px 56px);
+  -webkit-mask:radial-gradient(circle at 14px 0,#000 14px,transparent 14.5px) 0 0/28px 14px repeat-x;
+          mask:radial-gradient(circle at 14px 0,#000 14px,transparent 14.5px) 0 0/28px 14px repeat-x;
+}
+header{
+  background:var(--navy);color:#fff6e4;padding:8px 14px;display:flex;align-items:center;gap:10px;
+}
+header .logo{font-size:24px;letter-spacing:1px;white-space:nowrap}
+.card .n.u{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:1px}
+header .logo b{color:var(--gold)}
+header .sp{flex:1}
+header .hbtn{white-space:nowrap;background:transparent;border:2px solid #fff6e4;color:#fff6e4;border-radius:999px;padding:4px 12px;font-size:14px}
+.wrap{max-width:980px;margin:0 auto;padding:12px}
+.panel{background:#fffaf0;border:3px solid var(--ink);border-radius:18px;padding:16px;box-shadow:0 5px 0 var(--ink);margin-bottom:14px}
+h1,h2,h3{margin:0 0 10px;font-weight:normal}
+.title-big{font-size:48px;text-align:center;color:var(--red);text-shadow:3px 3px 0 var(--ink);margin:10px 0 0}
+.subtitle{text-align:center;color:var(--muted);margin-bottom:18px}
+input.txt{font-family:inherit;font-size:20px;padding:10px 12px;border:3px solid var(--ink);border-radius:12px;width:100%;background:#fff}
+.btn{font-size:18px;padding:10px 16px;border:3px solid var(--ink);border-radius:14px;background:var(--gold);color:var(--ink);box-shadow:0 4px 0 var(--ink);transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn.red{background:var(--red);color:#fff}
+.btn.navy{background:var(--navy);color:#fff}
+.btn.green{background:var(--green);color:#fff}
+.btn.white{background:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:0 4px 0 var(--ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.col{display:flex;flex-direction:column;gap:10px}
+.grow{flex:1}
+.muted{color:var(--muted)}
+.code{font-size:44px;letter-spacing:8px;color:var(--red);text-shadow:2px 2px 0 var(--ink)}
+.plist{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.pchip{background:var(--cream);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;font-size:18px}
+.pchip.off{opacity:.45}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:14px 0 24px}
+
+/* ---------- 카드 ---------- */
+.card{
+  --w:60px; width:var(--w); height:calc(var(--w)*1.5); flex:0 0 auto;
+  border:2px solid #3a2e22; border-radius:calc(var(--w)*.14);
+  position:relative; overflow:hidden; user-select:none;
+  background:linear-gradient(to bottom,var(--lt) 0 50%,var(--lb) 50% 100%);
+  box-shadow:0 3px 0 rgba(0,0,0,.25);
+  transition:transform .15s, box-shadow .15s;
+}
+.card::before{ /* 크림색 안쪽 테두리 */
+  content:"";position:absolute;inset:calc(var(--w)*.06);border-radius:calc(var(--w)*.1);
+  border:1.5px dashed rgba(60,45,30,.25);pointer-events:none;
+}
+.card .mid{
+  position:absolute;left:50%;top:50%;width:calc(var(--w)*.34);height:calc(var(--w)*.34);
+  transform:translate(-50%,-50%) rotate(45deg);
+  background:#fffaf0;border:1.5px solid rgba(60,45,30,.35);border-radius:3px;
+}
+.card .n{
+  position:absolute;font-size:calc(var(--w)*.58);line-height:1;
+  color:var(--c);text-shadow:1px 1px 0 #fffaf0,-1px -1px 0 #fffaf0,1px -1px 0 #fffaf0,-1px 1px 0 #fffaf0;
+}
+.card .n.t{left:calc(var(--w)*.1);top:calc(var(--w)*.08)}
+.card .n.b{right:calc(var(--w)*.1);bottom:calc(var(--w)*.08);transform:rotate(180deg);font-size:calc(var(--w)*.42);opacity:.85}
+.card .n.t.ten{font-size:calc(var(--w)*.46)}
+.card .n.b.ten{font-size:calc(var(--w)*.34)}
+.card.sel{transform:translateY(-14px);box-shadow:0 0 0 4px var(--gold),0 8px 0 rgba(0,0,0,.25)}
+.card.bad.sel{box-shadow:0 0 0 4px var(--red),0 8px 0 rgba(0,0,0,.25)}
+.card.newc{box-shadow:0 0 0 4px var(--green),0 3px 0 rgba(0,0,0,.25)}
+.card.pick{cursor:pointer;animation:bob 1s infinite ease-in-out;box-shadow:0 0 0 4px var(--green),0 3px 0 rgba(0,0,0,.25)}
+.card.picked{box-shadow:0 0 0 4px var(--red);opacity:.45}
+.card.tap{cursor:pointer}
+.card.back{background:repeating-linear-gradient(45deg,var(--red) 0 6px,#fff6e4 6px 12px)}
+.card.back .mid{background:var(--navy)}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.pop .card{animation:pop .3s ease-out}
+
+/* ---------- 게임 화면 ---------- */
+.players{display:flex;gap:8px;flex-wrap:wrap}
+.pl{
+  flex:1 1 150px;background:#fffaf0;border:3px solid var(--ink);border-radius:14px;padding:8px 10px;
+  box-shadow:0 3px 0 var(--ink);position:relative;min-width:140px
+}
+.pl.turn{background:#fff1c2;border-color:var(--red);box-shadow:0 3px 0 var(--red)}
+.pl .nm{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl .nm .me{color:var(--red)}
+.pl .st{display:flex;gap:8px;font-size:14px;color:#4a4036;flex-wrap:wrap;margin-top:2px}
+.pl .tot{position:absolute;right:8px;top:6px;font-size:20px;color:var(--navy)}
+.pl .tag{display:inline-block;font-size:12px;background:var(--red);color:#fff;border-radius:6px;padding:0 6px;margin-left:4px;vertical-align:middle}
+.pl .tag.g{background:var(--green)}
+.pl .tag.n{background:var(--navy)}
+.pl .ss{font-size:12px;border:1.5px solid var(--ink);border-radius:6px;padding:0 4px}
+.pl .ss.used{text-decoration:line-through;opacity:.4}
+.stage{
+  background:radial-gradient(ellipse at center,#c8473f 0%,#8f2a25 70%);
+  border:3px solid var(--ink);border-radius:22px;padding:14px;margin:12px 0;min-height:200px;
+  box-shadow:inset 0 0 0 6px rgba(255,246,228,.25),0 5px 0 var(--ink);color:#fff6e4;text-align:center;
+}
+.stage .lbl{font-size:16px;opacity:.9;margin-bottom:8px}
+.stage .set{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;min-height:120px;align-items:center}
+.stage .empty{font-size:20px;opacity:.75}
+.info{
+  background:var(--navy);color:#fff6e4;border-radius:14px;padding:10px 14px;font-size:18px;text-align:center;margin-bottom:10px;
+  border:3px solid var(--ink)
+}
+.info.my{background:var(--green)}
+.handbox{background:#fffaf0;border:3px solid var(--ink);border-radius:18px;padding:10px;box-shadow:0 5px 0 var(--ink)}
+.hand{display:flex;align-items:flex-end;gap:4px;overflow-x:auto;padding:18px 4px 8px;min-height:120px;justify-content:center}
+.hand.scroll{justify-content:flex-start}
+.hand.ov{gap:0}
+.hand.ov>.card+.card{margin-left:var(--ov)}
+.slot{
+  flex:0 0 auto;width:22px;align-self:stretch;min-height:80px;border:2px dashed var(--green);border-radius:8px;
+  background:rgba(63,155,90,.12);color:var(--green);font-size:18px;padding:0
+}
+.slot.on{background:var(--green);color:#fff;border-style:solid}
+.acts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.pending{display:flex;align-items:center;gap:12px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.log{max-height:150px;overflow-y:auto;font-size:15px;color:#4a4036;line-height:1.6}
+.log div:last-child{color:var(--ink)}
+table.res{width:100%;border-collapse:collapse;font-size:17px;margin:8px 0}
+table.res th,table.res td{border-bottom:2px dashed var(--cream2);padding:6px 4px;text-align:center}
+table.res th{color:var(--muted);font-weight:normal;font-size:14px}
+table.res td.nm{text-align:left}
+.minus{color:var(--red)}
+.plus{color:var(--green)}
+
+/* 모달 / 토스트 */
+#modal{position:fixed;inset:0;background:rgba(30,20,40,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:14px}
+#modal.on{display:flex}
+#modal .box{background:#fffaf0;border:3px solid var(--ink);border-radius:20px;max-width:640px;width:100%;max-height:88vh;overflow-y:auto;padding:18px;box-shadow:0 6px 0 var(--ink)}
+#modal .box p,#modal .box li{line-height:1.6;font-size:17px}
+#toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-size:17px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+
+/* 전자칠판 크게 보기 */
+body.board .wrap{max-width:1600px}
+body.board .stage{min-height:340px}
+body.board .stage .lbl{font-size:28px}
+body.board .pl .nm{font-size:28px}
+body.board .pl .st{font-size:22px}
+body.board .pl .tot{font-size:30px}
+body.board .info{font-size:28px}
+body.board .log{font-size:22px;max-height:260px}
+
+@media (max-width:520px){
+  .title-big{font-size:38px}
+  .pl{flex-basis:46%;min-width:0}
+  .pl .tot{font-size:17px}
+  .btn{font-size:16px;padding:9px 12px}
+  header .logo{font-size:19px}
+  header .logo .kr{display:none}
+  .slot{width:14px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="tent"></div>
+<header>
+  <div class="logo">🎪 <b>SCOUT!</b> <span class="kr">스카우트</span></div>
+  <div class="sp"></div>
+  <button class="hbtn" data-act="rules">규칙</button>
+  <button class="hbtn" data-act="home" id="homeBtn" style="display:none">나가기</button>
+</header>
+<div class="wrap" id="app"></div>
+<footer>made by m00n</footer>
+<div id="modal"><div class="box" id="modalBox"></div></div>
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<!-- ===================== 규칙 로직 (Firebase와 무관한 순수 함수) ===================== -->
+<script id="logic">
+const ScoutLogic = (() => {
+  const T = c => +c.split('|')[0];          // 위쪽(지금 쓰는) 숫자
+  const B = c => +c.split('|')[1];          // 아래쪽 숫자
+  const flipCard = c => B(c) + '|' + T(c);
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+  // 1~10 두 숫자 조합 45장. 인원별 제거: 3인 → 10이 든 9장 / 2·4인 → 9-10 1장 / 5인 → 없음
+  function makeDeck(n){
+    const d=[];
+    for(let a=1;a<=10;a++) for(let b=a+1;b<=10;b++){
+      if(n===3 && b===10) continue;
+      if((n===2||n===4) && a===9 && b===10) continue;
+      d.push(Math.random()<.5 ? a+'|'+b : b+'|'+a);
+    }
+    return shuffle(d);
+  }
+  const HAND_SIZE = {2:11, 3:12, 4:11, 5:9};
+
+  // 세트 분석: 같은 숫자(set) 또는 1씩 이어지는 숫자(run)
+  function analyze(cards){
+    const v = cards.map(T);
+    if(!v.length) return {ok:false};
+    if(v.length===1) return {ok:true,type:'set',len:1,min:v[0]};
+    if(v.every(x=>x===v[0])) return {ok:true,type:'set',len:v.length,min:v[0]};
+    const d = v[1]-v[0];
+    if(d!==1 && d!==-1) return {ok:false};
+    for(let i=2;i<v.length;i++) if(v[i]-v[i-1]!==d) return {ok:false};
+    return {ok:true,type:'run',len:v.length,min:Math.min(...v)};
+  }
+  // a가 b보다 강한가? (장수 → 같은 숫자 > 연속 → 가장 작은 숫자)
+  function beats(a,b){
+    if(!a || !a.ok) return false;
+    if(!b) return true;
+    if(a.len!==b.len) return a.len>b.len;
+    if(a.type!==b.type) return a.type==='set';
+    return a.min>b.min;
+  }
+  const activeCards = g => (g.active && g.active.cards) || [];
+  function activeInfo(g){ const c=activeCards(g); return c.length ? analyze(c) : null; }
+  function legalShowsVs(hand, act){
+    const res=[];
+    for(let i=0;i<hand.length;i++) for(let j=i;j<hand.length;j++){
+      const a=analyze(hand.slice(i,j+1));
+      if(!a.ok) break;
+      if(beats(a,act)) res.push([i,j]);
+    }
+    return res;
+  }
+  const legalShows = (hand,g) => legalShowsVs(hand, activeInfo(g));
+
+  // Firebase가 빈 배열/객체를 지우므로 읽을 때 복원
+  function norm(g){
+    if(!g) return g;
+    g.order = g.order || [];
+    g.names = g.names || {};
+    g.hands = g.hands || {};
+    ['flipReady','piles','chips','ssUsed','scores'].forEach(k=>g[k]=g[k]||{});
+    g.order.forEach(p=>{
+      g.hands[p]=g.hands[p]||[];
+      g.flipReady[p]=!!g.flipReady[p];
+      g.piles[p]=g.piles[p]||0;
+      g.chips[p]=g.chips[p]||0;
+      g.ssUsed[p]=!!g.ssUsed[p];
+      g.scores[p]=g.scores[p]||0;
+    });
+    if(g.active){ g.active.cards = g.active.cards || []; }
+    else g.active = null;
+    g.reserve = g.reserve || [];
+    g.log = g.log || [];
+    g.lastShower = g.lastShower || null;
+    g.result = g.result || null;
+    if(g.result) g.result.rows = g.result.rows || {};
+    return g;
+  }
+  const nm = (g,p) => (g.names && g.names[p]) || '?';
+  const show = cs => cs.map(T).join('-');
+  function addLog(g,msg){ g.log = (g.log||[]).concat(msg).slice(-40); }
+
+  function newGame(order, names){
+    const n=order.length;
+    const g={order:order.slice(), names:Object.assign({},names), n, round:1, totalRounds:n===2?2:n, scores:{}, log:[], over:false};
+    order.forEach(p=>g.scores[p]=0);
+    setupRound(g);
+    return g;
+  }
+  function setupRound(g){
+    const n=g.order.length, hands={};
+    if(n===2){
+      if(g.round===1){
+        const d=makeDeck(2);
+        hands[g.order[0]]=d.slice(0,11); hands[g.order[1]]=d.slice(11,22); g.reserve=d.slice(22);
+      } else {
+        const d=shuffle((g.reserve||[]).slice());
+        hands[g.order[0]]=d.slice(0,11); hands[g.order[1]]=d.slice(11,22); g.reserve=[];
+      }
+    } else {
+      const d=makeDeck(n), k=HAND_SIZE[n];
+      g.order.forEach((p,i)=>hands[p]=d.slice(i*k,(i+1)*k));
+      g.reserve=[];
+    }
+    g.hands=hands; g.phase='flip'; g.active=null; g.lastShower=null; g.result=null;
+    g.flipReady={}; g.piles={}; g.chips={}; g.ssUsed={};
+    g.order.forEach(p=>{ g.flipReady[p]=false; g.piles[p]=0; g.chips[p]= n===2?3:0; g.ssUsed[p]=false; });
+    g.turn=(g.round-1)%n;
+    addLog(g, `🎪 ${g.round}라운드 시작! 첫 차례: ${nm(g,g.order[g.turn])}`);
+  }
+  function doFlip(g,pid,flip){
+    if(g.phase!=='flip') throw '지금은 손패를 뒤집는 시간이 아니에요';
+    if(g.flipReady[pid]) throw '이미 확정했어요';
+    if(flip) g.hands[pid]=g.hands[pid].slice().reverse().map(flipCard);
+    g.flipReady[pid]=true;
+    if(g.order.every(p=>g.flipReady[p])){ g.phase='play'; addLog(g,'모두 준비 완료! 공연 시작 🎺'); }
+  }
+  function checkTurn(g,pid){
+    if(g.phase!=='play') throw '지금은 행동할 수 없어요';
+    if(g.order[g.turn]!==pid) throw '내 차례가 아니에요';
+  }
+  function applyScout(g,pid,end,flip,pos){
+    const cards=activeCards(g).slice();
+    if(!cards.length) throw '가져올 카드가 없어요';
+    if(g.active.owner===pid) throw '내 쇼에서는 가져올 수 없어요';
+    const n=g.order.length;
+    if(n===2 && g.chips[pid]<=0) throw '스카우트 칩이 없어요';
+    let card = end==='L' ? cards.shift() : cards.pop();
+    if(flip) card=flipCard(card);
+    const hand=g.hands[pid].slice();
+    pos=Math.max(0,Math.min(hand.length, pos|0));
+    hand.splice(pos,0,card);
+    g.hands[pid]=hand;
+    g.active.cards=cards;
+    if(n===2) g.chips[pid]--; else g.chips[g.active.owner]=(g.chips[g.active.owner]||0)+1;
+    addLog(g, `🔍 ${nm(g,pid)} 님이 ${nm(g,g.active.owner)} 님의 쇼에서 [${T(card)}] 카드를 스카우트`);
+  }
+  function doShowCore(g,pid,i,j){
+    const hand=g.hands[pid].slice();
+    if(i>j) [i,j]=[j,i];
+    if(i<0||j>=hand.length) throw '잘못된 선택이에요';
+    const seg=hand.slice(i,j+1), a=analyze(seg);
+    if(!a.ok) throw '같은 숫자끼리 또는 1씩 이어지는 숫자만 낼 수 있어요';
+    if(!beats(a,activeInfo(g))) throw '지금 무대의 쇼보다 강해야 해요';
+    const prev=activeCards(g).length;
+    g.piles[pid]+=prev;
+    hand.splice(i,j-i+1);
+    g.hands[pid]=hand;
+    g.active={cards:seg, owner:pid};
+    g.lastShower=pid;
+    addLog(g, `🎭 ${nm(g,pid)} 님이 [${show(seg)}] 쇼!` + (prev?` (이전 쇼 ${prev}장 획득)`:''));
+  }
+  function stuck2(g){ // 2인: 차례인 사람이 쇼도 못 하고 칩도 없으면 라운드 끝
+    const p=g.order[g.turn];
+    if(g.chips[p]<=0 && legalShows(g.hands[p],g).length===0){
+      addLog(g, `${nm(g,p)} 님은 낼 쇼도, 남은 칩도 없어요`);
+      endRound(g,'stuck', g.active ? g.active.owner : null);
+      return true;
+    }
+    return false;
+  }
+  function afterShow(g,pid){
+    if(!g.hands[pid].length){ endRound(g,'empty',pid); return; }
+    g.turn=(g.turn+1)%g.order.length;
+    if(g.order.length===2) stuck2(g);
+  }
+  function doShow(g,pid,i,j){ checkTurn(g,pid); doShowCore(g,pid,i,j); afterShow(g,pid); }
+  function doScout(g,pid,end,flip,pos){
+    checkTurn(g,pid);
+    applyScout(g,pid,end,flip,pos);
+    if(g.order.length===2){ stuck2(g); return; }   // 2인: 스카우트하면 내 차례가 이어짐
+    g.turn=(g.turn+1)%g.order.length;
+    if(g.order[g.turn]===g.lastShower) endRound(g,'allScouted', g.lastShower);
+  }
+  function doScoutShow(g,pid,end,flip,pos,i,j){
+    if(g.order.length===2) throw '2인 게임에서는 스카우트&쇼를 쓰지 않아요';
+    checkTurn(g,pid);
+    if(g.ssUsed[pid]) throw '스카우트&쇼는 라운드마다 한 번만!';
+    applyScout(g,pid,end,flip,pos);
+    g.ssUsed[pid]=true;
+    doShowCore(g,pid,i,j);
+    afterShow(g,pid);
+  }
+  function endRound(g,reason,exempt){
+    const n=g.order.length, rows={};
+    g.order.forEach(p=>{
+      const pile=g.piles[p]||0;
+      const chips= n===2 ? Math.min(3,g.chips[p]||0) : (g.chips[p]||0);
+      const hand=(g.hands[p]||[]).length;
+      const penalty = p===exempt ? 0 : hand;
+      const score=pile+chips-penalty;
+      g.scores[p]=(g.scores[p]||0)+score;
+      rows[p]={pile,chips,hand,penalty,score,total:g.scores[p]};
+    });
+    g.result={reason, exempt:exempt||'', rows, round:g.round};
+    g.phase='roundEnd';
+    if(g.round>=g.totalRounds) g.over=true;
+    const why = reason==='empty' ? `${nm(g,exempt)} 님이 손패를 모두 냈어요!`
+              : reason==='allScouted' ? `아무도 ${nm(g,exempt)} 님의 쇼를 이기지 못했어요!`
+              : `더 이상 진행할 수 없어요`;
+    addLog(g, `🏁 ${g.round}라운드 종료 — ${why}`);
+  }
+  function nextRound(g){
+    if(g.phase!=='roundEnd') throw '아직 라운드가 끝나지 않았어요';
+    if(g.over) throw '게임이 끝났어요';
+    g.round++;
+    setupRound(g);
+  }
+  return {T,B,flipCard,shuffle,makeDeck,analyze,beats,activeInfo,activeCards,legalShows,legalShowsVs,norm,
+          newGame,setupRound,doFlip,doShow,doScout,doScoutShow,nextRound,HAND_SIZE};
+})();
+</script>
+
+<!-- ===================== 앱 (Firebase + 화면) ===================== -->
+<script>
+const L = ScoutLogic, T = L.T, B = L.B;
+
+// ▼ Firebase 설정 (forsale-e1be8 프로젝트)
+const firebaseConfig = {
+  apiKey: "AIzaSyBaCGL9HFO1bHYl4XHpBq6lpvstYhcm5EQ",
+  authDomain: "forsale-e1be8.firebaseapp.com",
+  databaseURL: "https://forsale-e1be8-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "forsale-e1be8",
+  storageBucket: "forsale-e1be8.firebasestorage.app",
+  messagingSenderId: "844634125485",
+  appId: "1:844634125485:web:a24abe2cf51b4b2f950224"
+};
+let db = null;
+try { firebase.initializeApp(firebaseConfig); db = firebase.database(); } catch(e){ console.error(e); }
+
+// 숫자별 색 (원작처럼 숫자마다 고유 색)
+const COL = {
+  1:['#7b4fa8','#e7dcf0'], 2:['#3a6fc4','#dbe6f6'], 3:['#1f9aa0','#d5eeee'], 4:['#3f9b4a','#dcefd9'],
+  5:['#8aa61f','#ebf1d1'], 6:['#d6a114','#f7ecc9'], 7:['#e07b1f','#f8e1c8'], 8:['#d8433b','#f6d6d1'],
+  9:['#c23d7a','#f3d3e2'], 10:['#5a4632','#e6ddd1']
+};
+
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const LS = {
+  get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:v; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+function rid(n=8){ const s='abcdefghijkmnpqrstuvwxyz23456789'; let r=''; for(let i=0;i<n;i++) r+=s[Math.floor(Math.random()*s.length)]; return r; }
+const S = {
+  pid: LS.get('scout_pid','') || (()=>{ const p='p'+rid(10); LS.set('scout_pid',p); return p; })(),
+  name: LS.get('scout_name',''),
+  code: null, ref: null, room: null, board: false,
+  ui: {}, uiKey: '', lastTurnMine: false
+};
+function resetUI(){ S.ui = {mode:null, step:null, anchor:null, sel:null, end:null, flip:false, pos:null, flipPreview:false, cycle:-1}; }
+resetUI();
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+let toastT=null;
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2200); }
+function modal(html){ $('#modalBox').innerHTML=html; $('#modal').classList.add('on'); }
+function closeModal(){ $('#modal').classList.remove('on'); }
+$('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
+
+function cardHTML(c, w, cls='', attrs=''){
+  const t=T(c), b=B(c);
+  return `<div class="card ${cls}" style="--w:${w}px;--c:${COL[t][0]};--lt:${COL[t][1]};--lb:${COL[b][1]}" ${attrs}>
+    <div class="mid"></div>
+    <div class="n t ${t===10?'ten':''} ${t===6||t===9?'u':''}">${t}</div>
+    <div class="n b ${b===10?'ten':''} ${b===6||b===9?'u':''}" style="--c:${COL[b][0]}">${b}</div>
+  </div>`;
+}
+function backHTML(w){ return `<div class="card back" style="--w:${w}px"><div class="mid"></div></div>`; }
+
+// ---------------- 방 관리 ----------------
+const roomRef = code => db.ref('scout/'+code);   // DB 규칙의 scout/$room 경로
+function genCode(){ const s='ABCDEFGHJKLMNPQRSTUVWXYZ'; let r=''; for(let i=0;i<4;i++) r+=s[Math.floor(Math.random()*s.length)]; return r; }
+
+async function createRoom(){
+  if(!db) return toast('Firebase 연결에 실패했어요');
+  const name=($('#nameIn')||{}).value?.trim(); if(!name) return toast('이름을 입력해 주세요');
+  S.name=name; LS.set('scout_name',name);
+  let code, tries=0;
+  do { code=genCode(); const s=await roomRef(code).once('value'); if(!s.exists()) break; } while(++tries<10);
+  await roomRef(code).set({ status:'lobby', host:S.pid, created:firebase.database.ServerValue.TIMESTAMP,
+    players:{ [S.pid]:{ name, joined:firebase.database.ServerValue.TIMESTAMP, online:true } } });
+  enterRoom(code,false);
+}
+async function joinRoom(asBoard){
+  if(!db) return toast('Firebase 연결에 실패했어요');
+  const code=($('#codeIn')||{}).value?.trim().toUpperCase();
+  if(!code || code.length!==4) return toast('방 코드 4글자를 입력해 주세요');
+  const snap=await roomRef(code).once('value');
+  if(!snap.exists()) return toast('그런 방이 없어요');
+  if(asBoard) return enterRoom(code,true);
+  const name=($('#nameIn')||{}).value?.trim(); if(!name) return toast('이름을 입력해 주세요');
+  S.name=name; LS.set('scout_name',name);
+  const r=snap.val(), ps=r.players||{};
+  if(!ps[S.pid]){
+    if(r.status!=='lobby') return toast('이미 게임이 시작된 방이에요 (전자칠판 보기는 가능)');
+    if(Object.keys(ps).length>=5) return toast('방이 가득 찼어요 (최대 5명)');
+  }
+  await roomRef(code).child('players/'+S.pid).update({ name, joined: ps[S.pid]?.joined || firebase.database.ServerValue.TIMESTAMP, online:true });
+  if(r.status!=='lobby' && r.game && r.game.names && r.game.names[S.pid]) {
+    // 재접속: 이름 그대로
+  }
+  enterRoom(code,false);
+}
+function enterRoom(code,board){
+  if(S.ref) S.ref.off();
+  S.code=code; S.board=board; S.ref=roomRef(code); S.room=null; resetUI();
+  document.body.classList.toggle('board',board);
+  LS.set('scout_last',code);
+  const u=new URL(location.href); u.searchParams.set('room',code); if(board) u.searchParams.set('board','1'); else u.searchParams.delete('board');
+  history.replaceState(null,'',u);
+  if(!board){
+    const on=S.ref.child('players/'+S.pid+'/online');
+    on.set(true); on.onDisconnect().set(false);
+  }
+  S.ref.on('value', snap=>{
+    S.room=snap.val();
+    if(!S.room){ toast('방이 사라졌어요'); goHome(); return; }
+    if(S.room.game) L.norm(S.room.game);
+    render();
+  });
+}
+function goHome(){
+  if(S.ref){
+    S.ref.off();
+    if(!S.board && S.room && S.room.status==='lobby') S.ref.child('players/'+S.pid).remove();
+    else if(!S.board) S.ref.child('players/'+S.pid+'/online').set(false);
+  }
+  S.ref=null; S.room=null; S.code=null; S.board=false; document.body.classList.remove('board');
+  const u=new URL(location.href); u.searchParams.delete('room'); u.searchParams.delete('board'); history.replaceState(null,'',u);
+  render();
+}
+async function startGame(){
+  let err=null;
+  await S.ref.transaction(r=>{
+    if(!r) return r;
+    err=null;
+    if(r.status!=='lobby'){ err='이미 시작했어요'; return; }
+    const ps=Object.entries(r.players||{}).filter(([,v])=>v.online!==false).sort((a,b)=>(a[1].joined||0)-(b[1].joined||0));
+    if(ps.length<2||ps.length>5){ err='2~5명이 있어야 시작할 수 있어요'; return; }
+    const order=L.shuffle(ps.map(x=>x[0])), names={};
+    ps.forEach(([p,v])=>names[p]=v.name);
+    r.game=L.newGame(order,names); r.status='playing';
+    return r;
+  });
+  if(err) toast(err);
+}
+async function act(fn){
+  let err=null;
+  try{
+    await S.ref.child('game').transaction(g=>{
+      if(!g) return g;
+      err=null;
+      L.norm(g);
+      try{ fn(g); return g; } catch(e){ err = typeof e==='string'?e:(e.message||'오류'); return; }
+    });
+  }catch(e){ err='저장 실패: '+e.message; }
+  if(err) toast(err); else resetUI();
+}
+async function backToLobby(){
+  await S.ref.update({status:'lobby', game:null});
+}
+
+// ---------------- 렌더 ----------------
+function render(){
+  $('#homeBtn').style.display = S.code ? '' : 'none';
+  if(!S.code) return renderHome();
+  const r=S.room; if(!r) { app.innerHTML='<div class="panel">불러오는 중…</div>'; return; }
+  if(r.status==='lobby' || !r.game) return renderLobby();
+  renderGame();
+}
+
+function renderHome(){
+  const params=new URLSearchParams(location.search);
+  const last=LS.get('scout_last','');
+  app.innerHTML=`
+  <div class="title-big">SCOUT!</div>
+  <div class="subtitle">서커스 단장이 되어 최고의 쇼를 꾸며요 · 2~5명 온라인</div>
+  <div class="panel col">
+    <label>내 이름</label>
+    <input class="txt" id="nameIn" maxlength="10" placeholder="이름 (최대 10자)" value="${esc(S.name)}">
+    <button class="btn red" data-act="create">🎪 새 방 만들기</button>
+  </div>
+  <div class="panel col">
+    <label>방 코드로 들어가기</label>
+    <input class="txt" id="codeIn" maxlength="4" placeholder="ABCD" style="text-transform:uppercase;letter-spacing:6px" value="${esc(params.get('room')||'')}">
+    <div class="row">
+      <button class="btn grow" data-act="join">참가하기</button>
+      <button class="btn navy grow" data-act="joinBoard">📺 전자칠판으로 보기</button>
+    </div>
+    ${last?`<div class="muted">최근 방: <b>${esc(last)}</b> <button class="btn white" style="font-size:14px;padding:4px 10px" data-act="fillLast">코드 넣기</button></div>`:''}
+  </div>`;
+}
+
+function renderLobby(){
+  const r=S.room, ps=Object.entries(r.players||{}).sort((a,b)=>(a[1].joined||0)-(b[1].joined||0));
+  const isHost=r.host===S.pid;
+  const online=ps.filter(([,v])=>v.online!==false).length;
+  const link=location.origin+location.pathname+'?room='+S.code;
+  app.innerHTML=`
+  <div class="panel" style="text-align:center">
+    <div class="muted">방 코드</div>
+    <div class="code">${esc(S.code)}</div>
+    <div class="muted" style="font-size:14px;word-break:break-all">${esc(link)}</div>
+  </div>
+  <div class="panel">
+    <h2>참가자 ${online}/5</h2>
+    <div class="plist">${ps.map(([p,v])=>`<span class="pchip ${v.online===false?'off':''}">${p===r.host?'👑 ':''}${esc(v.name)}${p===S.pid?' (나)':''}</span>`).join('')}</div>
+    <p class="muted">${online===2?'2명이면 <b>2인 변형 규칙</b>(라운드 2번, 스카우트 칩 3개)으로 진행해요.':'인원수만큼 라운드를 진행해요. 자리 순서는 시작할 때 무작위로 정해져요.'}</p>
+    ${S.board?'<p class="muted">📺 전자칠판 화면이에요. 게임이 시작되면 무대가 크게 나와요.</p>':
+      isHost?`<button class="btn red" data-act="start" ${online<2||online>5?'disabled':''}>공연 시작!</button>`:'<p>방장이 시작하기를 기다리는 중…</p>'}
+  </div>`;
+}
+
+function myTurn(g){ return !S.board && g.phase==='play' && g.order[g.turn]===S.pid; }
+
+function playersHTML(g){
+  const two=g.order.length===2;
+  return `<div class="players">${g.order.map((p,i)=>{
+    const on=(S.room.players||{})[p]?.online!==false;
+    const turn=g.phase==='play'&&g.turn===i;
+    const owner=g.active&&g.active.owner===p;
+    return `<div class="pl ${turn?'turn':''}" style="${on?'':'opacity:.55'}">
+      <div class="tot">${g.scores[p]}점</div>
+      <div class="nm">${p===S.pid?'<span class="me">●</span> ':''}${esc(g.names[p])}${turn?'<span class="tag">차례</span>':''}${owner?'<span class="tag n">쇼 주인</span>':''}${g.phase==='flip'&&g.flipReady[p]?'<span class="tag g">준비</span>':''}</div>
+      <div class="st">
+        <span title="손패">🃏 ${g.hands[p].length}</span>
+        <span title="가져온 카드">⭐ ${g.piles[p]}</span>
+        <span title="${two?'남은 스카우트 칩':'받은 스카우트 칩'}">🎟 ${g.chips[p]}</span>
+        ${two?'':`<span class="ss ${g.ssUsed[p]?'used':''}">S&amp;S</span>`}
+      </div>
+    </div>`;}).join('')}</div>`;
+}
+
+function stageHTML(g, w){
+  const cards=L.activeCards(g);
+  const u=S.ui;
+  let lbl='무대가 비어 있어요';
+  if(g.active){ const a=L.activeInfo(g); lbl = `${esc(g.names[g.active.owner])} 님의 쇼` + (a?` · ${a.len}장 ${a.type==='set'&&a.len>1?'같은 숫자':a.len>1?'연속 숫자':''}`:''); }
+  const picking = myTurn(g) && (u.mode==='scout'||u.mode==='ss') && u.step==='pick';
+  const html = cards.length ? cards.map((c,i)=>{
+    const isEnd = i===0 || i===cards.length-1;
+    const endKey = i===0 ? 'L' : 'R';
+    let cls=''; let attrs='';
+    if(picking && isEnd){ cls='pick'; attrs=`data-act="pickEnd" data-end="${cards.length===1?'L':endKey}"`; }
+    if(u.end && (u.mode==='scout'||u.mode==='ss') && u.step!=='pick'){
+      if((u.end==='L'&&i===0)||(u.end==='R'&&i===cards.length-1)) cls='picked';
+    }
+    return cardHTML(c,w,cls,attrs);
+  }).join('') : `<div class="empty">${g.active?'쇼 카드가 모두 스카우트됐어요 · 아무 쇼나 낼 수 있어요':'첫 쇼를 기다리는 중'}</div>`;
+  return `<div class="stage"><div class="lbl">🎪 ${lbl}</div><div class="set ${S.ui.mode?'':'pop'}">${html}</div></div>`;
+}
+
+function handLayout(n){
+  const W=Math.min(window.innerWidth,980)-50;
+  let w=Math.max(40,Math.min(72,Math.floor(W/Math.max(n,1))-4));
+  if(n*(w+4)<=W) return {w,ov:0,scroll:false};
+  w=window.innerWidth<520?46:56;
+  const ov=Math.floor((W-n*w)/(n-1));
+  if(w+ov>=w*0.52) return {w,ov,scroll:false};
+  return {w,ov:-Math.floor(w*0.48),scroll:true};
+}
+function handOpen(lay){ return `<div class="hand ${lay.ov?'ov':''} ${lay.scroll?'scroll':''}" style="--ov:${lay.ov}px">`; }
+function handWidth(count, extra=0){
+  const W=Math.min(window.innerWidth,980)-50-extra;
+  return Math.max(window.innerWidth<520?32:40, Math.min(72, Math.floor(W/Math.max(count,1))-4));
+}
+
+// 스카우트 예정 카드(뒤집기 반영)
+function pendingCard(g){
+  const cards=L.activeCards(g); if(!S.ui.end||!cards.length) return null;
+  let c = S.ui.end==='L' ? cards[0] : cards[cards.length-1];
+  return S.ui.flip ? L.flipCard(c) : c;
+}
+function previewHand(g){
+  const hand=g.hands[S.pid].slice();
+  const pc=pendingCard(g);
+  if(pc && S.ui.pos!=null) hand.splice(S.ui.pos,0,pc);
+  return hand;
+}
+function remainingActiveInfo(g){
+  const cards=L.activeCards(g).slice();
+  if(S.ui.end==='L') cards.shift(); else if(S.ui.end==='R') cards.pop();
+  return cards.length?L.analyze(cards):null;
+}
+
+function renderGame(){
+  const g=S.room.game;
+  const key=[g.round,g.phase,g.turn,g.log.length].join('/');
+  if(key!==S.uiKey){ S.uiKey=key; resetUI(); }
+  const mine=myTurn(g);
+  if(mine && !S.lastTurnMine){ toast('내 차례예요! 🎺'); try{navigator.vibrate&&navigator.vibrate(120);}catch(e){} }
+  S.lastTurnMine=mine;
+
+  let html=playersHTML(g);
+  html+=stageHTML(g, S.board?96:Math.min(70,handWidth(Math.max(L.activeCards(g).length,5))));
+
+  if(S.board){
+    html+=boardInfo(g);
+  } else if(g.order.includes(S.pid)){
+    html+=myArea(g);
+  } else {
+    html+=`<div class="panel">이 게임에 참가하지 않았어요. 전자칠판 보기로 관전할 수 있어요.</div>`;
+  }
+  html+=`<div class="panel"><h3>기록 <span class="muted" style="font-size:14px">· ${g.round}/${g.totalRounds} 라운드${g.order.length===2?' · 2인 변형':''}</span></h3><div class="log" id="log">${g.log.slice(-15).map(x=>`<div>${esc(x)}</div>`).join('')}</div></div>`;
+  app.innerHTML=html;
+  const lg=$('#log'); if(lg) lg.scrollTop=lg.scrollHeight;
+
+  if(g.phase==='roundEnd') showResult(g); else if($('#modalBox').dataset.kind==='result'){ closeModal(); $('#modalBox').dataset.kind=''; }
+}
+
+function boardInfo(g){
+  let msg='';
+  if(g.phase==='flip') msg=`손패 확인 중… (${g.order.filter(p=>g.flipReady[p]).length}/${g.order.length} 준비)`;
+  else if(g.phase==='play') msg=`🎺 ${esc(g.names[g.order[g.turn]])} 님 차례`;
+  else msg=`🏁 ${g.round}라운드 종료`;
+  return `<div class="info">${msg}</div>`;
+}
+
+function myArea(g){
+  const u=S.ui, hand=g.hands[S.pid], two=g.order.length===2;
+  let info='', acts='', handHtml='', extra='', lay=null;
+
+  // ----- 손패 뒤집기 단계 -----
+  if(g.phase==='flip'){
+    const ready=g.flipReady[S.pid];
+    const h = (u.flipPreview && !ready) ? hand.slice().reverse().map(L.flipCard) : hand;
+    const lay=handLayout(h.length), w=lay.w;
+    handHtml=h.map(c=>cardHTML(c,w)).join('');
+    if(ready){ info=`<div class="info">준비 완료! 다른 친구들을 기다리는 중… (${g.order.filter(p=>g.flipReady[p]).length}/${g.order.length})</div>`; }
+    else {
+      info=`<div class="info my">손패 순서는 바꿀 수 없어요. 대신 <b>손패 전체를 한 번 뒤집을 수</b> 있어요 (위·아래 숫자와 순서가 함께 바뀌어요)</div>`;
+      acts=`<button class="btn white" data-act="flipPrev">🔄 ${u.flipPreview?'원래대로 보기':'뒤집어 보기'}</button>
+            <button class="btn green" data-act="flipOK">이대로 확정!</button>`;
+    }
+    return `${info}<div class="handbox">${handOpen(lay)}${handHtml}</div><div class="acts">${acts}</div></div>`;
+  }
+  if(g.phase==='roundEnd'){
+    const lay=handLayout(hand.length), w=lay.w;
+    return `<div class="info">라운드 종료</div><div class="handbox">${handOpen(lay)}${hand.map(c=>cardHTML(c,w)).join('')}</div></div>`;
+  }
+
+  // ----- 진행 단계 -----
+  const mine=myTurn(g);
+  const actCards=L.activeCards(g);
+  const legal=L.legalShows(hand,g);
+  const canScout = actCards.length>0 && g.active.owner!==S.pid && (!two || g.chips[S.pid]>0);
+  const canSS = !two && canScout && !g.ssUsed[S.pid];
+
+  if(!mine){
+    lay=handLayout(hand.length); const w=lay.w;
+    info=`<div class="info">${esc(g.names[g.order[g.turn]])} 님 차례예요</div>`;
+    handHtml=hand.map(c=>cardHTML(c,w)).join('');
+    return `${info}<div class="handbox">${handOpen(lay)}${handHtml}</div></div>`;
+  }
+
+  // 선택 상태 계산
+  const selectHand = (u.mode==='ss' && u.step==='select') ? previewHand(g) : hand;
+  let selInfo=null;
+  if(u.sel){ selInfo=L.analyze(selectHand.slice(u.sel[0],u.sel[1]+1)); }
+  const vsInfo = (u.mode==='ss') ? remainingActiveInfo(g) : L.activeInfo(g);
+  const selOK = selInfo && selInfo.ok && L.beats(selInfo, vsInfo);
+
+  if(!u.mode){
+    info=`<div class="info my">내 차례! 무엇을 할까요?${!legal.length?' <br>낼 수 있는 쇼가 없어요 → 스카우트 하세요':''}</div>`;
+    lay=handLayout(hand.length); const w=lay.w;
+    handHtml=hand.map(c=>cardHTML(c,w)).join('');
+    acts=`<button class="btn red" data-act="mShow" ${legal.length?'':'disabled'}>🎭 쇼</button>
+          <button class="btn green" data-act="mScout" ${canScout?'':'disabled'}>🔍 스카우트${two?` (칩 ${g.chips[S.pid]})`:''}</button>
+          ${two?'':`<button class="btn navy" data-act="mSS" ${canSS?'':'disabled'}>⚡ 스카우트&amp;쇼${g.ssUsed[S.pid]?' (사용함)':' (1회)'}</button>`}`;
+  }
+  else if(u.mode==='show' || (u.mode==='ss' && u.step==='select')){
+    const h=selectHand; lay=handLayout(h.length); const w=lay.w;
+    const newIdx = u.mode==='ss' ? u.pos : -1;
+    handHtml=h.map((c,i)=>{
+      const inSel=u.sel && i>=u.sel[0] && i<=u.sel[1];
+      return cardHTML(c,w,`tap ${inSel?'sel':''} ${inSel&&!selOK?'bad':''} ${i===newIdx?'newc':''}`,`data-act="tap" data-i="${i}"`);
+    }).join('');
+    let msg='낼 카드를 누르세요. 첫 카드 → 끝 카드 순서로 누르면 그 사이가 모두 선택돼요.';
+    if(u.sel){
+      if(!selInfo.ok) msg='❌ 같은 숫자끼리, 또는 1씩 이어지는 숫자만 낼 수 있어요';
+      else if(!selOK) msg=`❌ ${selInfo.len}장 쇼 — 무대의 쇼보다 약해요`;
+      else msg=`✅ ${selInfo.len}장 ${selInfo.len===1?'':selInfo.type==='set'?'같은 숫자 ':'연속 숫자 '}쇼를 낼 수 있어요!`;
+    }
+    const nLegal = u.mode==='ss' ? L.legalShowsVs(h, vsInfo).length : legal.length;
+    info=`<div class="info my">${msg}</div>`;
+    acts=`<button class="btn red" data-act="${u.mode==='ss'?'doSS':'doShow'}" ${selOK?'':'disabled'}>${u.mode==='ss'?'⚡ 스카우트&amp;쇼!':'🎭 쇼!'}</button>
+          <button class="btn white" data-act="cycle" ${nLegal?'':'disabled'}>💡 가능한 조합 보기 (${nLegal})</button>
+          <button class="btn white" data-act="cancel">취소</button>`;
+  }
+  else if(u.mode==='scout' || u.mode==='ss'){
+    if(u.step==='pick'){
+      info=`<div class="info my">무대 쇼의 <b>양 끝</b> 카드 중 하나를 눌러 가져오세요 (초록 테두리)</div>`;
+      lay=handLayout(hand.length); const w=lay.w;
+      handHtml=hand.map(c=>cardHTML(c,w)).join('');
+      acts=`<button class="btn white" data-act="cancel">취소</button>`;
+    } else { // place
+      const pc=pendingCard(g);
+      const w=handWidth(hand.length+1, (hand.length+1)*(window.innerWidth<520?18:26));
+      let parts=[];
+      for(let i=0;i<=hand.length;i++){
+        parts.push(`<button class="slot ${u.pos===i?'on':''}" data-act="pos" data-pos="${i}">${u.pos===i?'✓':'+'}</button>`);
+        if(u.pos===i) parts.push(cardHTML(pc,w,'newc'));
+        if(i<hand.length) parts.push(cardHTML(hand[i],w));
+      }
+      handHtml=parts.join('');
+      info=`<div class="info my">가져온 카드를 넣을 자리(+)를 고르세요. 필요하면 뒤집을 수 있어요.</div>`;
+      extra=`<div class="pending"><span>가져온 카드</span>${cardHTML(pc,56)}<button class="btn white" data-act="flipPend">🔄 뒤집기</button></div>`;
+      acts = u.mode==='scout'
+        ? `<button class="btn green" data-act="doScout" ${u.pos==null?'disabled':''}>🔍 스카우트 완료</button>`
+        : `<button class="btn navy" data-act="ssNext" ${u.pos==null?'disabled':''}>다음: 쇼 고르기 →</button>`;
+      acts+=`<button class="btn white" data-act="cancel">취소</button>`;
+    }
+  }
+  const scroll = handHtml.split('class="card').length*60 > window.innerWidth;
+  return `${info}<div class="handbox">${extra}${lay?handOpen(lay):`<div class="hand ${scroll?'scroll':''}">`}${handHtml}</div><div class="acts">${acts}</div></div>`;
+}
+
+const REASON = {empty:'손패를 모두 냈어요', allScouted:'아무도 쇼를 이기지 못했어요', stuck:'더 이상 진행할 수 없어요'};
+function showResult(g){
+  const res=g.result; if(!res) return;
+  const rows=g.order.map(p=>[p,res.rows[p]||{pile:0,chips:0,hand:0,penalty:0,score:0,total:g.scores[p]}]);
+  const two=g.order.length===2;
+  let html=`<h2>🏁 ${res.round}라운드 결과</h2>
+  <p class="muted">${res.exempt?esc(g.names[res.exempt])+' 님 — ':''}${REASON[res.reason]||''}${res.exempt?' (손패 감점 없음)':''}</p>
+  <table class="res"><tr><th>이름</th><th>가져온 카드</th><th>${two?'남은 칩':'스카우트 칩'}</th><th>남은 손패</th><th>이번 라운드</th><th>총점</th></tr>
+  ${rows.map(([p,r])=>`<tr><td class="nm">${esc(g.names[p])}${p===S.pid?' (나)':''}</td><td class="plus">+${r.pile}</td><td class="plus">+${r.chips}</td>
+    <td class="minus">${r.penalty?'−'+r.penalty:(r.hand?`0 <span class="muted" style="font-size:12px">(면제)</span>`:'0')}</td><td><b>${r.score>=0?'+':''}${r.score}</b></td><td><b>${r.total}</b></td></tr>`).join('')}
+  </table>`;
+  if(g.over){
+    const rank=g.order.slice().sort((a,b)=>g.scores[b]-g.scores[a]);
+    const top=g.scores[rank[0]];
+    html+=`<h2 style="margin-top:14px">🏆 최종 순위</h2>
+    <table class="res">${rank.map((p,i)=>{
+      const place=rank.findIndex(q=>g.scores[q]===g.scores[p])+1;
+      return `<tr><td>${place===1?'🥇':place===2?'🥈':place===3?'🥉':place+'위'}</td><td class="nm">${esc(g.names[p])}</td><td><b>${g.scores[p]}점</b></td></tr>`;}).join('')}</table>
+    <p style="text-align:center;font-size:22px">${rank.filter(p=>g.scores[p]===top).map(p=>esc(g.names[p])).join(', ')} 님 우승! 🎉</p>`;
+    html+= !S.board && S.room.host===S.pid ? `<div class="acts"><button class="btn red" data-act="lobby">대기실로 (새 게임)</button></div>` : `<p class="muted" style="text-align:center">방장이 새 게임을 준비할 수 있어요</p>`;
+  } else {
+    html+= S.board ? `<p class="muted" style="text-align:center">학생 기기에서 '다음 라운드'를 누르면 시작돼요</p>`
+                   : `<div class="acts"><button class="btn red" data-act="next">다음 라운드 →</button></div>`;
+  }
+  $('#modalBox').dataset.kind='result';
+  modal(html);
+}
+
+function rulesHTML(){
+  return `<h2>🎪 스카우트 규칙</h2>
+  <p><b>목표</b>: 서커스 단장이 되어 다른 단장의 쇼를 이기고, 점수를 가장 많이 모아요.</p>
+  <p><b>카드</b>: 한 장에 숫자가 두 개 있어요. <b>위쪽 큰 숫자</b>만 써요. 손패의 순서는 바꿀 수 없어요! 라운드 시작 때 손패 전체를 한 번 뒤집을지만 고를 수 있어요.</p>
+  <p><b>내 차례에 하나를 골라요</b></p>
+  <ul>
+    <li>🎭 <b>쇼</b>: 손패에서 <b>붙어 있는</b> 카드를 내요. 같은 숫자(예: 5-5-5) 또는 1씩 이어지는 숫자(예: 3-4-5, 8-7-6)만 돼요. 무대의 쇼보다 강해야 하고, 이기면 무대에 있던 카드를 가져가요 (1장 = 1점).</li>
+    <li>🔍 <b>스카우트</b>: 무대 쇼의 <b>양 끝</b> 카드 하나를 가져와 내 손패 원하는 자리에 넣어요 (뒤집어도 돼요). 쇼 주인은 스카우트 칩 1개(1점)를 받아요.</li>
+    <li>⚡ <b>스카우트&amp;쇼</b>: 라운드마다 한 번, 스카우트를 한 뒤 바로 쇼를 해요.</li>
+  </ul>
+  <p><b>누가 더 강할까?</b> ① 카드가 많은 쇼 ② 장수가 같으면 같은 숫자 쇼가 연속 숫자 쇼보다 강함 ③ 그것도 같으면 가장 작은 숫자가 큰 쪽</p>
+  <p><b>라운드 끝</b>: 누군가 손패를 다 내거나, 모두가 스카우트만 해서 차례가 쇼 주인에게 돌아오면 끝나요.</p>
+  <p><b>점수</b>: 가져온 카드 +1, 스카우트 칩 +1, 남은 손패 1장당 −1 (라운드를 끝낸 쇼 주인은 감점 없음). 인원수만큼 라운드를 해요.</p>
+  <p><b>👥 2인 변형</b>: 2라운드만 해요(첫 라운드에 남긴 22장으로 2라운드). 각자 스카우트 칩 3개로 시작하고, 스카우트할 때마다 칩 1개를 내요. 스카우트를 하면 <b>내 차례가 이어져요</b> (쇼를 할 때까지). 스카우트&amp;쇼는 없어요. 쇼를 못 하고 칩도 없으면 라운드가 끝나요. 남은 칩은 1개당 1점!</p>
+  <div class="acts"><button class="btn" data-act="closeModal">알겠어요!</button></div>`;
+}
+
+// ---------------- 이벤트 ----------------
+document.addEventListener('click', e=>{
+  const el=e.target.closest('[data-act]'); if(!el) return;
+  const a=el.dataset.act, u=S.ui, g=S.room&&S.room.game;
+  switch(a){
+    case 'rules': $('#modalBox').dataset.kind='rules'; modal(rulesHTML()); return;
+    case 'closeModal': closeModal(); $('#modalBox').dataset.kind=''; return;
+    case 'home': if(confirm('방에서 나갈까요? (게임 중이면 같은 기기로 다시 들어올 수 있어요)')) goHome(); return;
+    case 'create': createRoom(); return;
+    case 'join': joinRoom(false); return;
+    case 'joinBoard': joinRoom(true); return;
+    case 'fillLast': $('#codeIn').value=LS.get('scout_last',''); return;
+    case 'start': startGame(); return;
+    case 'lobby': closeModal(); backToLobby(); return;
+    case 'next': closeModal(); act(G=>L.nextRound(G)); return;
+    case 'flipPrev': u.flipPreview=!u.flipPreview; render(); return;
+    case 'flipOK': { const f=u.flipPreview; act(G=>L.doFlip(G,S.pid,f)); return; }
+    case 'mShow': resetUI(); S.ui.mode='show'; render(); return;
+    case 'mScout': resetUI(); S.ui.mode='scout'; S.ui.step='pick'; render(); return;
+    case 'mSS': resetUI(); S.ui.mode='ss'; S.ui.step='pick'; render(); return;
+    case 'cancel': resetUI(); render(); return;
+    case 'pickEnd': u.end=el.dataset.end; u.step='place'; u.pos=null; u.flip=false; render(); return;
+    case 'flipPend': u.flip=!u.flip; render(); return;
+    case 'pos': u.pos=+el.dataset.pos; render(); return;
+    case 'ssNext': u.step='select'; u.sel=null; u.anchor=null; render(); return;
+    case 'tap': {
+      const i=+el.dataset.i;
+      if(u.anchor==null || (u.sel && u.sel[0]!==u.sel[1])){ u.anchor=i; u.sel=[i,i]; }
+      else if(u.anchor===i){ u.anchor=null; u.sel=null; }
+      else { u.sel=[Math.min(u.anchor,i),Math.max(u.anchor,i)]; u.anchor=null; }
+      render(); return;
+    }
+    case 'cycle': {
+      const h = u.mode==='ss' ? previewHand(g) : g.hands[S.pid];
+      const vs = u.mode==='ss' ? remainingActiveInfo(g) : L.activeInfo(g);
+      const list=L.legalShowsVs(h,vs).sort((x,y)=>(y[1]-y[0])-(x[1]-x[0]));
+      if(!list.length) return;
+      u.cycle=(u.cycle+1)%list.length; u.sel=list[u.cycle].slice(); u.anchor=null; render(); return;
+    }
+    case 'doShow': { const [i,j]=u.sel; act(G=>L.doShow(G,S.pid,i,j)); return; }
+    case 'doScout': { const {end,flip,pos}=u; act(G=>L.doScout(G,S.pid,end,flip,pos)); return; }
+    case 'doSS': { const {end,flip,pos}=u; const [i,j]=u.sel; act(G=>L.doScoutShow(G,S.pid,end,flip,pos,i,j)); return; }
+  }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.id==='codeIn') joinRoom(false); if(e.key==='Escape') closeModal(); });
+let rzT; window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(render,150); });
+
+// 시작
+(function init(){
+  const p=new URLSearchParams(location.search);
+  if(!db){ render(); toast('Firebase를 불러오지 못했어요. 인터넷 연결을 확인해 주세요'); return; }
+  const code=(p.get('room')||'').toUpperCase();
+  if(code && p.get('board')==='1'){ enterRoom(code,true); return; }
+  if(code){
+    roomRef(code).once('value').then(s=>{
+      const r=s.val();
+      if(r && r.players && r.players[S.pid]) enterRoom(code,false);   // 같은 기기 재접속
+      else render();
+    });
+    return;
+  }
+  render();
+})();
+</script>
+</body>
+</html>
